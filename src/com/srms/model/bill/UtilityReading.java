@@ -8,24 +8,24 @@ public class UtilityReading extends SrmsEntity {
     private final double currentElectricityReading;
     private final double previousElectricityReading;
 
-    public UtilityReading(String id,  double previousElectricityReading,double currentElectricityReading) {
-        super(id);
+    public UtilityReading(Builder builder) {
+        super(builder.id);
 
-        if (currentElectricityReading < 0 || previousElectricityReading < 0) {
+        if (builder.currentElectricityReading < 0 || builder.previousElectricityReading < 0) {
             throw new IllegalArgumentException("Negative meter reading value detected.");
         }
 
-        if (currentElectricityReading < previousElectricityReading) {
+        if (builder.currentElectricityReading < builder.previousElectricityReading) {
             throw new IllegalStateException("New reading must be greater or equals to previous reading");
         }
-        this.currentElectricityReading = currentElectricityReading;
-        this.previousElectricityReading = previousElectricityReading;
+        this.currentElectricityReading = builder.currentElectricityReading;
+        this.previousElectricityReading = builder.previousElectricityReading;
 
     }
 
     public double calculateConsumedUnits() {
 
-        return currentElectricityReading - previousElectricityReading;
+        return this.currentElectricityReading - this.previousElectricityReading;
     }
 
     //getters only for immutability
@@ -41,10 +41,38 @@ public class UtilityReading extends SrmsEntity {
         return getCreatedAt();
     }
 
+    public static class Builder {
+        private final String id;
+        private double currentElectricityReading;
+        private double previousElectricityReading;
+
+        public Builder(String id) {
+            this.id = id;
+            this.previousElectricityReading = -1;
+            this.currentElectricityReading = -1;
+        }
+
+        public Builder currentReading(double val){
+            this.currentElectricityReading  = val;
+            return this;
+        }
+        public Builder previousReading(double val){
+            this.previousElectricityReading = val;
+            return this;
+        }
+
+        public UtilityReading build() {
+            if(this.currentElectricityReading < 0 || this.previousElectricityReading < 0){
+                throw new IllegalStateException("Both readings must be set before building.");
+            }
+            return new UtilityReading(this);
+        }
+    }
+
     @Override
     public String toString() {
         return "UtilityReading{" +
-                 super.toString() +
+                super.toString() +
                 ", previousElectricityReading=" + previousElectricityReading +
                 ", currentElectricityReading=" + currentElectricityReading +
                 ", consumedUnits=" + calculateConsumedUnits() +

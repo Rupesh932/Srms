@@ -43,7 +43,7 @@ public class RentBill extends SrmsEntity {
 
     }
 
-    public double calculateTotalPayable() {
+    private double calculateTotalPayable() {
         return (this.rentAmount + this.electricityCharge + this.fixWaterCharge + this.fixGarbageCharge + this.previousDue) - this.advancePaid;
     }
 

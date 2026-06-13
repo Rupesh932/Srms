@@ -102,11 +102,11 @@ public class Main {
 
         // १२. मिटर रिडिङ रेकर्ड (१२०.५ बाट बढेर २१०.५ पुग्यो = कुल ९० युनिट खपत)
         System.out.println("१. पहिलो महिनाको अन्तिममा मिटर रिडिङ रेकرد गर्दै...");
-        UtilityReading readingMonth1 = new UtilityReading(
-                "UR-2026-M1",
-                contract.getStartElectricity(), // कन्ट्याक्ट अझै ACTIVE छ, त्यसैले ट्याक्कै १२०.५ आउँछ!
-                210.5
-        );
+
+        UtilityReading readingMonth1 = new UtilityReading.Builder("UR-1:mon - 1: 2026-001")
+                .currentReading(220.5)
+                .previousReading(120.5)
+                .build();
         System.out.println("✅ Utility Reading Recorded: " + readingMonth1);
         System.out.println("👉 खपत भएको कुल बिजुली युनिट: " + readingMonth1.calculateConsumedUnits() + " Units");
 
